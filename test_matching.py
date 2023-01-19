@@ -4,8 +4,7 @@ from matching import *
 
 class Test(TestCase):
     def test_search(self):
-        self.assertEqual(['red and yellow'],
-                         search('red', ['red and yellow', 'blue and yellow', 'predict color']))
+        self.assertEqual(['red and yellow'],search('red', ['red and yellow', 'blue and yellow', 'predict color']))
 
     def test_search_empty_query(self):
         self.assertEqual([], search('', ['red and yellow', 'blue and yellow', 'predict color']))
