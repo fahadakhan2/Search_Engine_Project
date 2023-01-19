@@ -17,14 +17,14 @@ def search(query: str, documents: typing.List[str]) -> typing.List[str]:
     return out
 
 
-# def string_match(query: str, document: str) -> bool:
-#     """
-#     Implements document matching by checking if the query is a substring of the document.
-#     :param query: The text a user searched for.
-#     :param document: A candidate document.
-#     :return: True if the document matches the query and False otherwise.
-#     """
-#     return query in document
+def string_match(query: str, document: str) -> bool:
+    """
+    Implements document matching by checking if the query is a substring of the document.
+    :param query: The text a user searched for.
+    :param document: A candidate document.
+    :return: True if the document matches the query and False otherwise.
+    """
+    return query in document
 
 
 def boolean_term_match(query: str, document: str) -> bool:
@@ -40,3 +40,6 @@ def boolean_term_match(query: str, document: str) -> bool:
         if term not in document_terms:
             return False
     return True
+
+
+
