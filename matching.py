@@ -34,12 +34,14 @@ def boolean_term_match(query: str, document: str) -> bool:
     :param document: A candidate document.
     :return: True if all terms in the query are also in the document and False otherwise.
     """
-    query_terms: typing.List[str] = query.lower().split()
-    document_terms: typing.List[str] = document.lower().split()
-    for term in query_terms:
-        if term not in document_terms:
-            return False
-    return True
+    query_terms: typing.List[str] = set(query.lower().split())
+    document_terms: typing.List[str] = set(document.lower().split())
+    return query_terms.issubset(document_terms)
+
+    # for term in query_terms:
+    #     if term not in document_terms:
+    #         return False
+    # return True
 
 
 
