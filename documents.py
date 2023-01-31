@@ -6,7 +6,6 @@ class Document(typing.NamedTuple):
     doc_id: str
     text: str
 
-
 class DocumentCollection:
     def __init__(self):
         self.docs: typing.List[Document] = []
@@ -23,11 +22,38 @@ class DocumentCollection:
                 return doc
         return None
 
+class DictDocumentCollection:
+    def __init__(self):
+        self.docs: typing.Dict[str, Document] = {}
+
+    def add_document(self, doc: Document):
+        self.docs[doc.doc_id] = doc
+
+    def get_all_docs(self) -> typing.Dict[str, Document]:
+        return self.docs
+
+    def write(self, path: str):
+        json_data = {'docs': [d._asdict() for d in self.docs]}
+        with open(path, 'w') as fp:
+            json.dump(obj=json_data, fp=fp)
+
+    @staticmethod
+    def read(path: str) -> 'DictDocumentCollection':
+        out = DictDocumentCollection()
+        with open(path) as fp:
+            collection_dict = json.load(fp)
+
+        doc_records = collection_dict['docs']
+        for record in doc_records:
+            doc = Document(doc_id=record['doc_id'], text=record['text'])
+            out.add_document(doc)
+        return out
+
+
 
 class TransformedDocument(typing.NamedTuple):
     doc_id: str
     tokens: typing.List[str]
-
 
 class TransformedDocumentCollection:
     def __init__(self):

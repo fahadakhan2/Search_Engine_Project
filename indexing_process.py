@@ -1,16 +1,8 @@
 import json
 import typing
-
 from documents import Document, DocumentCollection, TransformedDocument, TransformedDocumentCollection
 from index import Index
 
-
-# class DictDocumentCollection:
-#     def __init__(self):
-#         self.docs: typing.Dict[Document] = {}
-#
-#     def add_document(self, doc: Document):
-#         pass
 
 
 class WikiSource:
