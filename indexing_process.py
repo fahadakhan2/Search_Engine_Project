@@ -53,4 +53,4 @@ def indexing_process(document_source: WikiSource) -> (DocumentCollection, Index)
     transformed_documents = transform_documents(document_collection)
     # transformed_documents.write(path='')
     index = create_index(transformed_documents)
-    return (document_collection, index)
+    return document_collection, index

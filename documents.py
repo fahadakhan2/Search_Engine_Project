@@ -17,6 +17,12 @@ class DocumentCollection:
     def get_all_docs(self) -> typing.List[Document]:
         return self.docs
 
+    def get(self, doc_id):
+        for doc in self.docs:
+            if doc.doc_id == doc_id:
+                return doc
+        return None
+
 
 class TransformedDocument(typing.NamedTuple):
     doc_id: str
