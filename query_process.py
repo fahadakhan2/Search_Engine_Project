@@ -1,10 +1,11 @@
 from typing import List
 
+import tokenizer
 from documents import DocumentCollection, Document
 
 
 def process_query(query: str) -> List[str]:
-    return query.lower().split()
+    return tokenizer.tokenize(query)
 
 
 

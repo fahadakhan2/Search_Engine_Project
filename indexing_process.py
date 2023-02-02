@@ -1,12 +1,15 @@
 import json
-import typing
 from documents import Document, DocumentCollection, TransformedDocument, TransformedDocumentCollection
 from index import Index
+from tokenizer import tokenize
 
 
+class Source:
+    def read_documents(self):
+        pass
 
-class WikiSource:
-    DEFAULT_PATH = r'C:\Users\Alex\Documents\DePaul\datasets\wiki_small\wiki_small.json'
+class WikiSource(Source):
+    DEFAULT_PATH = r'C:\wiki_small.json'
 
     def read_documents(self, data_file_path: str = DEFAULT_PATH) -> DocumentCollection:
         with open(data_file_path) as fp:
@@ -18,31 +21,38 @@ class WikiSource:
         return doc_collection
 
 
-def tokenize(document_text: str) -> typing.List[str]:
-    return document_text.lower().split()
+
+class IndexCreator:
+    def create_index(transformed_documents):
+        index = Index()
+        for doc in transformed_documents.get_all_docs():
+            index.add_document(doc)
+        return index
 
 
-def transform_documents(document_collection: DocumentCollection) -> TransformedDocumentCollection:
-    docs = document_collection.get_all_docs()
-    out = TransformedDocumentCollection()
-    for d in docs:
-        tokens = tokenize(d.text)
-        transformed_doc = TransformedDocument(doc_id=d.doc_id, tokens=tokens)
-        out.add_document(transformed_doc)
-    return out
+class DocumentTransformer:
+    def __init__(self, tokenizer):
+        self.tokenizer = tokenizer
+
+    def transform_documents(self, document_collection: DocumentCollection) -> TransformedDocumentCollection:
+        docs = document_collection.get_all_docs()
+        out = TransformedDocumentCollection()
+        for d in docs:
+            tokens = self.tokenizer.tokenize(d.text)
+            transformed_doc = TransformedDocument(doc_id=d.doc_id, tokens=tokens)
+            out.add_document(transformed_doc)
+        return out
 
 
-def create_index(transformed_documents):
-    index = Index()
-    for doc in transformed_documents.get_all_docs():
-        index.add_document(doc)
-    return index
+class IndexingProcess:
+    def __init__(self, tokenizer, document_transformer, index_creator):
+        self.tokenizer = tokenizer
+        self.document_transformer = document_transformer
+        self.index_creator = index_creator
 
-
-
-def indexing_process(document_source: WikiSource) -> (DocumentCollection, Index):
-    document_collection = document_source.read_documents()
-    transformed_documents = transform_documents(document_collection)
-    # transformed_documents.write(path='')
-    index = create_index(transformed_documents)
-    return document_collection, index
+    def run(self, document_source: Source) -> (DocumentCollection, Index):
+        document_collection = document_source.read_documents()
+        transformed_documents = self.document_transformer.transform_documents(document_collection)
+        # transformed_documents.write(path='')
+        index = self.index_creator.create_index(transformed_documents)
+        return document_collection, index
