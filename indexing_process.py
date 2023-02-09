@@ -1,7 +1,7 @@
 import json
 from documents import Document, DocumentCollection, TransformedDocument, TransformedDocumentCollection
-from index import Index
-from tokenizer import tokenize
+from index import Index, NaiveIndex
+from tokenizer import Tokenizer, NaiveTokenizer
 
 
 class Source:
@@ -31,7 +31,11 @@ class IndexCreator:
 
 
 class DocumentTransformer:
-    def __init__(self, tokenizer):
+    def transform_documents(self, document_collection: DocumentCollection) -> TransformedDocumentCollection:
+        pass
+
+class TokenizerOnlyDocumentTransformer(DocumentTransformer):
+    def __init__(self, tokenizer: Tokenizer):
         self.tokenizer = tokenizer
 
     def transform_documents(self, document_collection: DocumentCollection) -> TransformedDocumentCollection:
@@ -45,9 +49,15 @@ class DocumentTransformer:
 
 
 class IndexingProcess:
-    def __init__(self, document_transformer, index_creator):
+    def __init__(self, document_transformer: DocumentTransformer, index: Index):
         self.document_transformer = document_transformer
-        self.index_creator = index_creator
+        self.index = index
+
+    @staticmethod
+    def create_naive_indexing_process() -> 'IndexingProcess':
+        return IndexingProcess(
+            document_transformer=TokenizerOnlyDocumentTransformer(NaiveTokenizer()),
+            index=NaiveIndex())
 
     def run(self, document_source: Source) -> (DocumentCollection, Index):
         document_collection = document_source.read_documents()

@@ -4,6 +4,15 @@ from documents import TransformedDocument
 
 
 class Index:
+    def add_document(self, doc: TransformedDocument):
+        pass
+
+    def search(self, query: typing.List[str]) -> typing.List[str]:
+        pass
+
+
+
+class NaiveIndex(Index):
     def __init__(self):
         self.docs = dict()
 
