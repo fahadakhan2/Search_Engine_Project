@@ -45,8 +45,7 @@ class DocumentTransformer:
 
 
 class IndexingProcess:
-    def __init__(self, tokenizer, document_transformer, index_creator):
-        self.tokenizer = tokenizer
+    def __init__(self, document_transformer, index_creator):
         self.document_transformer = document_transformer
         self.index_creator = index_creator
 
@@ -54,5 +53,6 @@ class IndexingProcess:
         document_collection = document_source.read_documents()
         transformed_documents = self.document_transformer.transform_documents(document_collection)
         # transformed_documents.write(path='')
-        index = self.index_creator.create_index(transformed_documents)
-        return document_collection, index
+        for doc in transformed_documents.get_all_docs():
+            self.index.add_document(doc)
+        return document_collection, self.index
