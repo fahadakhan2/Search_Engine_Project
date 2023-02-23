@@ -1,5 +1,6 @@
 import typing
 
+
 class Tokenizer:
     def tokenize(self, document_text: str) -> typing.List[str]:
         pass

@@ -33,8 +33,7 @@ class FakeSource(indexing_process.Source):
 
 
 class FakeDocumentTransformer(indexing_process.DocumentTransformer):
-    def transform_documents(
-            self, document_collection: DocumentCollection) -> TransformedDocumentCollection:
+    def transform_documents(self, document_collection: DocumentCollection) -> TransformedDocumentCollection:
         docs = document_collection.get_all_docs()
         out = TransformedDocumentCollection()
         for d in docs:
